@@ -10,7 +10,7 @@ const App = () => {
     <Container className='my-10'>
       <StrapiFormProvider
         collectionName="students"
-        slug="56"
+        slug="58"
         query="populate=experience.Company.Contact,experience.Company.City,experience.Company.Industry,experience.Designation,Skills,qualification.school,qualification.qualification,Contacts,Address,Address.City,IndustriesPreference"
       >
         {({ submit }) => (

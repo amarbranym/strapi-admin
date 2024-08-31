@@ -19,7 +19,7 @@ interface RepeatableFormProps {
     type?: string
 }
 
-const RepeatableForm: React.FC<RepeatableFormProps> = ({ fieldsSchema, name = "", type = "experience" }) => {
+const RepeatableForm: React.FC<RepeatableFormProps> = ({ fieldsSchema, name = "", type ="RepeatableComponent" }) => {
     const { setSchema, data, handleData } = useStrapiFormContext();
 
     const formValue = Object.hasOwn(data, name) ? data[name] : []
