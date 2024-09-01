@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_contact_contacts",
+  "info": {
+    "displayName": "Contacts",
+    "icon": "user",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "contact": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::contact.contact"
+    },
+    "Designation": {
+      "type": "enumeration",
+      "enum": [
+        "Owner",
+        "Manager",
+        "Employee",
+        "HelpDesk "
+      ]
+    }
+  }
+}

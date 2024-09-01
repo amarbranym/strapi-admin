@@ -1,0 +1,99 @@
+{
+  "kind": "collectionType",
+  "collectionName": "students",
+  "info": {
+    "singularName": "student",
+    "pluralName": "students",
+    "displayName": "Student",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "experience": {
+      "displayName": "Experience",
+      "type": "component",
+      "repeatable": true,
+      "component": "student.experience",
+      "max": 5
+    },
+    "qualification": {
+      "displayName": "Qualification",
+      "type": "component",
+      "repeatable": true,
+      "component": "student.qualification"
+    },
+    "Skills": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::skill.skill"
+    },
+    "FirstName": {
+      "type": "string",
+      "required": true
+    },
+    "Email": {
+      "type": "email"
+    },
+    "LastName": {
+      "type": "string"
+    },
+    "Contacts": {
+      "type": "component",
+      "repeatable": true,
+      "component": "contact.phone"
+    },
+    "DOB": {
+      "type": "date"
+    },
+    "Gender": {
+      "type": "enumeration",
+      "enum": [
+        "Male",
+        "Female",
+        "Other",
+        "Unspecified"
+      ],
+      "default": "Unspecified"
+    },
+    "MaritalStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Married",
+        "Unmarried",
+        "Divorced",
+        "Unspecified"
+      ],
+      "default": "Unspecified"
+    },
+    "IndustriesPreference": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::industry.industry"
+    },
+    "FatherName": {
+      "type": "string"
+    },
+    "Address": {
+      "type": "component",
+      "repeatable": false,
+      "component": "contact.address"
+    },
+    "Profile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "Documents": {
+      "displayName": "Document",
+      "type": "component",
+      "repeatable": true,
+      "component": "student.document"
+    }
+  }
+}

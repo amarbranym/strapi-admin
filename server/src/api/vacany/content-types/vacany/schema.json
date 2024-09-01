@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vacancies",
+  "info": {
+    "singularName": "vacany",
+    "pluralName": "vacancies",
+    "displayName": "Vacancies"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Designation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::designation.designation"
+    },
+    "Company": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::company.company"
+    },
+    "Seats": {
+      "type": "integer"
+    },
+    "MinSalary": {
+      "type": "integer",
+      "min": 5000,
+      "default": 5000,
+      "required": false
+    },
+    "Status": {
+      "type": "enumeration",
+      "enum": [
+        "Open",
+        "Closed",
+        "Filled"
+      ]
+    },
+    "Candidates": {
+      "displayName": "Candidates",
+      "type": "component",
+      "repeatable": true,
+      "component": "vacancy.candidates"
+    },
+    "Notes": {
+      "type": "text"
+    },
+    "Title": {
+      "type": "string"
+    }
+  }
+}

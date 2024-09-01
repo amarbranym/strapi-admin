@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_contact_phones",
+  "info": {
+    "displayName": "Phone",
+    "icon": "phone",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "CountryCode": {
+      "type": "enumeration",
+      "enum": [
+        "USA (+1)",
+        "India (+91)",
+        "UK (+44)",
+        "Australia (+61)",
+        "Japan (+81)",
+        "Germany (+49)",
+        "France (+33)",
+        "China (+86)",
+        "Italy (+39)",
+        "Russia (+7)"
+      ],
+      "default": "India (+91)",
+      "required": true
+    },
+    "Number": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "Primary",
+        "Alternate",
+        "Work",
+        "Home"
+      ],
+      "default": "Primary"
+    }
+  }
+}

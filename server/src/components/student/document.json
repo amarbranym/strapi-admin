@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_student_documents",
+  "info": {
+    "displayName": "Document",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "DocumentType": {
+      "type": "enumeration",
+      "enum": [
+        "AadharCard",
+        "PAN Card",
+        "License"
+      ]
+    },
+    "Front": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "Back": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

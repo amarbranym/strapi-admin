@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_student_experiences",
+  "info": {
+    "displayName": "Experience",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "Company": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::company.company"
+    },
+    "Designation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::designation.designation"
+    },
+    "Duration": {
+      "type": "integer",
+      "min": 1,
+      "required": true,
+      "max": 12,
+      "default": 1
+    }
+  }
+}

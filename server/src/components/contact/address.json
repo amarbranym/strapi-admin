@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_contact_addresses",
+  "info": {
+    "displayName": "Address",
+    "icon": "house"
+  },
+  "options": {},
+  "attributes": {
+    "Street": {
+      "type": "text"
+    },
+    "City": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::city.city"
+    },
+    "AddressType": {
+      "type": "enumeration",
+      "enum": [
+        "Permanent",
+        "Alternate"
+      ]
+    }
+  }
+}
