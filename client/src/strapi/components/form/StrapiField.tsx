@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useField, useFormikContext } from 'formik';
 import Button from '../../ui/Button';
-import { useCreateNewEntryMutation, useGetOptionsQuery } from '../../../redux/api/apiSlice';
+import { useCreateDocumentOptionMutation, useGetDocumentOptionsQuery } from '../../redux/api/apiSlice';
 import CheveronDownIcon from '../../ui/icons/CheveronDownIcon';
 
 
@@ -26,12 +26,12 @@ const StrapiField = ({ ...props }: any) => {
         }
     }, [props.name, meta.value, props.multiple])
 
-    const { data } = useGetOptionsQuery(
+    const { data } = useGetDocumentOptionsQuery(
         { searchValue, model: props.rules.model },
         { refetchOnMountOrArgChange: true }
     );
 
-    const [createNewEntry, { isLoading }] = useCreateNewEntryMutation();
+    const [createDocumentOption, { isLoading }] = useCreateDocumentOptionMutation();
 
     useEffect(() => {
         if (data) {
@@ -93,7 +93,7 @@ const StrapiField = ({ ...props }: any) => {
     };
 
     const handleSave = async () => {
-        await createNewEntry({
+        await createDocumentOption({
             data: { [props.rules.field]: searchValue },
             model: props.rules.model
         });

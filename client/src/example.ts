@@ -24,7 +24,6 @@ export interface FormData {
 const startYear = 2000;
 const currentYear = moment().year(); // Fetches the current year
 const yearOptions = [];
-yearOptions.push({ label: "Choose here", value: "" });
 for (let year = startYear; year <= currentYear; year++) {
     yearOptions.push({ label: `y${year.toString()}`, value: `y${year.toString()}` });
 }
@@ -102,7 +101,6 @@ export const AddressSchema: FormData[] = [
     label: 'Address Type',
     rules: {
       options: [
-        { label: 'Choose here', value: '' },
         { value: 'permanent', label: 'Permanent' },
         { value: 'alternate', label: 'Alternate' }
       ]
@@ -177,7 +175,6 @@ export const ContactSchema: FormData[] = [
       required: true,
       rules: {
           options: [
-              { label: "Choose here", value: "" },
               { value: 'USA (+1)', label: 'USA (+1)' },
               { value: 'India (+91)', label: 'India (+91)' },
               { value: 'UK (+44)', label: 'UK(+44)' },
@@ -213,7 +210,6 @@ export const ContactSchema: FormData[] = [
 
       rules: {
           options: [
-              { label: "Choose here", value: "" },
               { value: "primary", label: "Primary" },
               { value: "alternate", label: "Alternate" },
               { value: "work", label: "Work" },
@@ -326,7 +322,6 @@ export const otherDetailSchema: FormData[] = [
       label: 'Gender',
       rules: {
           options: [
-              { label: "Choose here", value: "" },
               { label: "Male", value: "male" },
               { label: "Female", value: "female" },
               { label: "Other", value: "other" }
@@ -342,7 +337,6 @@ export const otherDetailSchema: FormData[] = [
       label: 'Marital Status',
       rules: {
           options: [
-              { label: "Choose here", value: "" },
               { label: "Unmarried", value: "unmarried" },
               { label: "Married", value: "married" },
               { label: "Divorced", value: "divorced" },
@@ -353,3 +347,29 @@ export const otherDetailSchema: FormData[] = [
       row: 1,
   },
 ]
+
+
+export const filterOprators = [
+  { label: "Equal", value: "$eq", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number", "date", "select"] },
+  { label: "Equal (case-insensitive)", value: "$eqi", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Not equal", value: "$ne", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number", "date"] },
+  { label: "Not equal (case-insensitive)", value: "$nei", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Less than", value: "$lt", fieldTypes: ["number", "date"] },
+  { label: "Less than or equal to", value: "$lte", fieldTypes: ["number", "date"] },
+  { label: "Greater than", value: "$gt", fieldTypes: ["number", "date"] },
+  { label: "Greater than or equal to", value: "$gte", fieldTypes: ["number", "date"] },
+  { label: "Included in an array", value: "$in", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number"] },
+  { label: "Not included in an array", value: "$notIn", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number"] },
+  { label: "Contains", value: "$contains", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Does not contain", value: "$notContains", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Contains (case-insensitive)", value: "$containsi", fieldTypes: ["text", "textarea", "email", "ref:strapi", "select"] },
+  { label: "Does not contain (case-insensitive)", value: "$notContainsi", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Is null", value: "$null", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number", "date", "select"] },
+  { label: "Is not null", value: "$notNull", fieldTypes: ["text", "textarea", "email", "ref:strapi", "number", "date", "select"] },
+  { label: "Is between", value: "$between", fieldTypes: ["number", "date"] },
+  { label: "Starts with", value: "$startsWith", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Starts with (case-insensitive)", value: "$startsWithi", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Ends with", "value": "$endsWith", "fieldTypes": ["text", "textarea", "email", "ref:strapi"] },
+  { label: "Ends with (case-insensitive)", value: "$endsWithi", fieldTypes: ["text", "textarea", "email", "ref:strapi"] },
+
+];

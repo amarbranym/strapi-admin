@@ -3,8 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { FormData } from '../../example';
 import { populateData } from '../utils/Services';
-// import { useCreateNewStudentMutation, useGetStudentQuery } from '../../redux/api/apiSlice';
-const isLoading = false;
+import { useCreateDocumentMutation, useGetDocumentQuery } from '../redux/api/apiSlice';
 interface StrapiFormContextProps {
   data: any;
   setData: React.Dispatch<React.SetStateAction<any>>;
@@ -23,11 +22,11 @@ export const StrapiFormProvider: React.FC<{
   slug?: string;
   query?: string;
 }> = ({ children, collectionName, slug, query }) => {
-  // const { data: studentData } = useGetStudentQuery({ collectionName, id: slug!, populateQuery: query }, {
-  //   skip: !slug,  // Skip the API call if slug is not provided
-  // });
+  const { data: studentData } = useGetDocumentQuery({ collectionName, id: slug!, populateQuery: query }, {
+    skip: !slug,  // Skip the API call if slug is not provided
+  });
   const [data, setData] = useState<any>({});
-  // const [createNewStudent, [isLoading]] = useCreateNewStudentMutation()
+  const [createDocument, { isLoading }] = useCreateDocumentMutation()
   const handleData = (key: string, values: any) => {
     setData((prevData: any) => ({ ...prevData, [key]: values }));
   };
@@ -35,46 +34,20 @@ export const StrapiFormProvider: React.FC<{
   const [schemaFields, setSchemaFields] = useState<any[]>([]);
 
   const setSchema = (obj: any) => {
-    console.log(obj)
     const _arr: any[] = schemaFields;
     _arr.push(obj)
     setSchemaFields(_arr)
   }
 
-  async function fetchGetData(slug: string) {
-    const url = `http://localhost:1337/api/${collectionName}/${slug}?${query}`
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include' as const,
-      });
+ 
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      const poulateResult = await populateData(schemaFields, result?.data?.attributes);
-      setData(poulateResult)
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  }
-
+ 
   useEffect(() => {
-    if (slug) {
-      fetchGetData(slug)
+    if (studentData) {
+      const poulateResult = populateData(schemaFields, studentData?.data?.attributes);
+      setData(poulateResult)
     }
-  }, [slug])
-
-
-
-
-
+  }, [studentData])
 
   const handleSubmit = async () => {
     let isValid: boolean = false
@@ -136,24 +109,11 @@ export const StrapiFormProvider: React.FC<{
     });
 
     if (isValid === false) {
-      // await createNewStudent({ collectionName, id: slug, data: submissionData })
-      try {
-        const url = `http://localhost:1337/api/${collectionName}${slug ? `/${slug}` : ""}`
-        const response = await fetch(url, {
-          method: slug ? "PUT" : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include' as const,
-          body: JSON.stringify({ data: submissionData }),
-        });
-        await response.json();
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
+      await createDocument({ collectionName, id: slug, data: submissionData })
     } else {
       isValid = false
     }
   }
-
 
 
   return (

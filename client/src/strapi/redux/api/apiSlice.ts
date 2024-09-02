@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  BaseQueryFn,
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+  FetchBaseQueryError
+} from '@reduxjs/toolkit/query/react';
 import toast from 'react-hot-toast';
 
 const onStart = (message?: string, onSuccess?: any) =>
@@ -16,22 +22,30 @@ const onStart = (message?: string, onSuccess?: any) =>
     }
   };
 
+const dynamicBaseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
+  args,
+  api,
+  extraOptions
+) => {
+  const baseUrl = (api.getState() as any).configuration.baseUrl;
+  console.log('Base URL:', baseUrl);
+  const rawBaseQuery = fetchBaseQuery({ baseUrl });
+  return rawBaseQuery(args, api, extraOptions);
+};
 export const apiSlice: any = createApi({
   reducerPath: 'api',
   tagTypes: ['strapi'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:1337/api/'
-  }),
+  baseQuery: dynamicBaseQuery,
   endpoints: (builder) => ({
-    getStudent: builder.query({
-      query: (params: {collectionName:string, id: string; populateQuery?: string }) => ({
+    getDocument: builder.query({
+      query: (params: { collectionName: string; id: string; populateQuery?: string }) => ({
         url: `${params.collectionName}/${params.id}?${params.populateQuery}`,
         method: 'GET',
         credentials: 'include' as const
       }),
       onQueryStarted: onStart()
     }),
-    deleteStudent: builder.mutation({
+    deleteDocument: builder.mutation({
       query: (studentId) => ({
         url: `students/${studentId}`,
         method: 'DELETE',
@@ -39,17 +53,22 @@ export const apiSlice: any = createApi({
       }),
       onQueryStarted: onStart('Deleted Successfuly', (dispatch: any) => {
         dispatch(
-          apiSlice.endpoints.getCandidateList.initiate({
+          apiSlice.endpoints.getDocumentList.initiate({
             page: 1,
             filterQuery: []
           })
         );
       })
     }),
-    getCandidateList: builder.mutation({
-      query: (params: { page: number; filterQuery: any[]; populateQuery: string }) => ({
-        url: `students?${params.populateQuery}&pagination[page]=${
-          params.page
+    getDocumentList: builder.mutation({
+      query: (params: {
+        collectionName: string;
+        currentPage: number;
+        filterQuery: any[];
+        populateQuery: string;
+      }) => ({
+        url: `${params.collectionName}?${params.populateQuery}&pagination[page]=${
+          params.currentPage
         }&pagination[pageSize]=6${
           params.filterQuery.length > 0
             ? params.filterQuery.map(
@@ -63,7 +82,7 @@ export const apiSlice: any = createApi({
       }),
       onQueryStarted: onStart()
     }),
-    getOptions: builder.query({
+    getDocumentOptions: builder.query({
       query: (params: { searchValue: string; model: string }) => ({
         url: `${params.model}?_q=${params.searchValue}`,
         method: 'GET',
@@ -71,7 +90,7 @@ export const apiSlice: any = createApi({
       }),
       onQueryStarted: onStart()
     }),
-    createNewEntry: builder.mutation({
+    createDocumentOption: builder.mutation({
       query: (params: { data: any; model: string }) => ({
         url: `${params.model}`,
         method: 'POST',
@@ -82,7 +101,7 @@ export const apiSlice: any = createApi({
       }),
       onQueryStarted: onStart()
     }),
-    createNewStudent: builder.mutation({
+    createDocument: builder.mutation({
       query: (params: { collectionName: string; id: string | undefined; data: any }) => ({
         url: params.id ? `${params.collectionName}/${params.id}` : params.collectionName,
         method: params.id ? 'PUT' : 'POST',
@@ -97,10 +116,10 @@ export const apiSlice: any = createApi({
 });
 
 export const {
-  useGetStudentQuery,
-  useGetOptionsQuery,
-  useCreateNewEntryMutation,
-  useCreateNewStudentMutation,
-  useGetCandidateListMutation,
-  useDeleteStudentMutation
+  useGetDocumentQuery,
+  useGetDocumentOptionsQuery,
+  useCreateDocumentOptionMutation,
+  useCreateDocumentMutation,
+  useGetDocumentListMutation,
+  useDeleteDocumentMutation
 } = apiSlice;
