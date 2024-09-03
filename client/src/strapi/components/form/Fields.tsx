@@ -33,9 +33,6 @@ const Form_Input = ({ ...props }:any) => {
           />
         </div>)
       }
-
-
-
       {
         ["textarea"].includes(props.type) && <textarea
           {...props}

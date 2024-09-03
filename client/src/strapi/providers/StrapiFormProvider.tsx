@@ -2,13 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { FormData } from '../../example';
-import { populateData } from '../utils/Services';
-import { useCreateDocumentMutation, useGetDocumentQuery } from '../redux/api/apiSlice';
+import { apiFetch, populateData } from '../utils/service';
+import { useStrapiContext } from './StrapiAdmin';
 interface StrapiFormContextProps {
   data: any;
   setData: React.Dispatch<React.SetStateAction<any>>;
   handleData: any;
-  isLoading: boolean;
+  isLoading?: boolean;
   submit?: () => void;
   setSchema: React.Dispatch<React.SetStateAction<any>>;
 }
@@ -16,17 +16,15 @@ interface StrapiFormContextProps {
 const StrapiFormContext = createContext<StrapiFormContextProps | undefined>(undefined);
 
 export const StrapiFormProvider: React.FC<{
-  children: (props: { submit: () => void; isLoading: boolean }) => React.ReactNode;
+  children: (props: { submit: () => void; isLoading?: boolean }) => React.ReactNode;
   submit?: (result: { data: any; success: boolean }) => void;
   collectionName: string;
   slug?: string;
   query?: string;
 }> = ({ children, collectionName, slug, query }) => {
-  const { data: studentData } = useGetDocumentQuery({ collectionName, id: slug!, populateQuery: query }, {
-    skip: !slug,  // Skip the API call if slug is not provided
-  });
+
   const [data, setData] = useState<any>({});
-  const [createDocument, { isLoading }] = useCreateDocumentMutation()
+  const {baseURL} = useStrapiContext()
   const handleData = (key: string, values: any) => {
     setData((prevData: any) => ({ ...prevData, [key]: values }));
   };
@@ -39,15 +37,19 @@ export const StrapiFormProvider: React.FC<{
     setSchemaFields(_arr)
   }
 
- 
+  const handleGetDocument = async () => {
+    const result = await apiFetch(baseURL + 
+      `/${collectionName}/${slug}?${query}`);
+    const poulateResult = populateData(schemaFields, result?.data?.attributes);
+    setData(poulateResult)
+  }
 
- 
+
   useEffect(() => {
-    if (studentData) {
-      const poulateResult = populateData(schemaFields, studentData?.data?.attributes);
-      setData(poulateResult)
+    if (slug) {
+      handleGetDocument()
     }
-  }, [studentData])
+  }, [slug])
 
   const handleSubmit = async () => {
     let isValid: boolean = false
@@ -56,7 +58,6 @@ export const StrapiFormProvider: React.FC<{
       for (let index = 0; index < schema.length; index++) {
         const field: FormData = schema[index];
 
-        // Check if required field is missing in data
         if (field.required) {
           if (!data[field?.name] || data[field?.name] === undefined || data[field?.name] === null || data[field?.name] === '') {
             isValid = true
@@ -109,7 +110,19 @@ export const StrapiFormProvider: React.FC<{
     });
 
     if (isValid === false) {
-      await createDocument({ collectionName, id: slug, data: submissionData })
+      const options = {
+        method: slug ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: submissionData }),
+        credentials: 'include',
+      };
+      const url = slug ? `${collectionName}/${slug}` : `${collectionName}`
+      await apiFetch(baseURL + 
+        `/${url}`,
+        options
+      );
     } else {
       isValid = false
     }
@@ -117,8 +130,8 @@ export const StrapiFormProvider: React.FC<{
 
 
   return (
-    <StrapiFormContext.Provider value={{ data, setData, handleData, isLoading, setSchema, submit: handleSubmit }}>
-      {children({ submit: handleSubmit, isLoading })}
+    <StrapiFormContext.Provider value={{ data, setData, handleData, setSchema, submit: handleSubmit }}>
+      {children({ submit: handleSubmit })}
     </StrapiFormContext.Provider>
   );
 };

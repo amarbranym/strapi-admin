@@ -2,14 +2,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useField, useFormikContext } from 'formik';
 import Button from '../../ui/Button';
-import { useCreateDocumentOptionMutation, useGetDocumentOptionsQuery } from '../../redux/api/apiSlice';
 import CheveronDownIcon from '../../ui/icons/CheveronDownIcon';
+import { apiFetch } from '../../utils/service';
+import { useStrapiContext } from '../../providers/StrapiAdmin';
 
 
 
 const StrapiField = ({ ...props }: any) => {
     const [field, meta] = useField(props.name)
     const { setFieldValue } = useFormikContext<any>();
+    const {baseURL} = useStrapiContext()
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<string>("");
     const [values, setValues] = useState<any[]>([]);
@@ -26,23 +28,22 @@ const StrapiField = ({ ...props }: any) => {
         }
     }, [props.name, meta.value, props.multiple])
 
-    const { data } = useGetDocumentOptionsQuery(
-        { searchValue, model: props.rules.model },
-        { refetchOnMountOrArgChange: true }
-    );
 
-    const [createDocumentOption, { isLoading }] = useCreateDocumentOptionMutation();
+
+    const handleGetDocument = async () => {
+        const url = `${props.rules.model}?_q=${searchValue}`;
+        const data = await apiFetch(baseURL + `/${url}`);
+        const options = data?.data?.map((item: any) => ({
+            label: item.attributes[props.rules.field],
+            value: item.attributes[props.rules.field],
+            id: item.id
+        })) || [];
+        setValues(options);
+    }
 
     useEffect(() => {
-        if (data) {
-            const options = data?.data?.map((item: any) => ({
-                label: item.attributes[props.rules.field],
-                value: item.attributes[props.rules.field],
-                id: item.id
-            })) || [];
-            setValues(options);
-        }
-    }, [data]);
+        handleGetDocument()
+    }, [searchValue]);
 
     const inputRef = useRef<any>(null);
 
@@ -93,10 +94,22 @@ const StrapiField = ({ ...props }: any) => {
     };
 
     const handleSave = async () => {
-        await createDocumentOption({
-            data: { [props.rules.field]: searchValue },
-            model: props.rules.model
-        });
+        const payload = { [props.rules.field]: searchValue }
+
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ data: payload }),
+            credentials: 'include',
+        };
+        await apiFetch(baseURL + `/${props.rules.model}`, options)
+        // await createDocumentOption({
+        //     data: { [props.rules.field]: searchValue },
+        //     model: props.rules.model
+        // });
     };
 
     return (
@@ -148,7 +161,7 @@ const StrapiField = ({ ...props }: any) => {
 
                         )) :
                             <li onClick={handleSave} className=" text-center  cursor-pointer block px-4 py-8 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
-                                <Button size='md' bg='white' type='button' loading={isLoading} >add item</Button>
+                                <Button size='md' bg='white' type='button'  >add item</Button>
                             </li>
                     }
 

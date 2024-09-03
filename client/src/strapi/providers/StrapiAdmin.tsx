@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { createContext, useContext, ReactNode } from 'react';
+
 interface StrapiContextProps {
     baseURL: string;
     apiKey: string;
@@ -8,17 +8,11 @@ interface StrapiContextProps {
 const StrapiContext = createContext<StrapiContextProps | undefined>(undefined);
 
 export const StrapiAdmin: React.FC<{ children: ReactNode, baseURL?: string, apiKey?: string }> = ({ children, baseURL = "http://localhost:1337/api", apiKey = "" }) => {
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch({
-            type: 'configuration/updateBaseUrl',
-            payload: "http://localhost:1337/api",
-        });
-    }, [baseURL, dispatch]);
 
     return (
+
         <StrapiContext.Provider value={{ baseURL, apiKey }}>
-            {children}
+                {children}
         </StrapiContext.Provider>
     );
 };

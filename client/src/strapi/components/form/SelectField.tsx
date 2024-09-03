@@ -25,7 +25,7 @@ const SelectField = ({ ...props }: any) => {
             ...field
             }
             onChange={handleChange}
-            className=" block  w-full rounded-md border-0 py-2 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300   sm:text-sm sm:leading-6 focus:outline-none"
+            className="input-text"
         >
             <option disabled selected>Choose here</option>
 
