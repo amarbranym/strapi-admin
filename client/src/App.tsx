@@ -11,6 +11,8 @@ import Empty from './strapi/components/list/Empty';
 import Filters from './strapi/components/list/Filters';
 import Pagination from './strapi/components/list/Pagination';
 import { StrapiAdmin } from './strapi/providers/StrapiAdmin';
+import Login from './strapi/components/auth/Login';
+import Signup from './strapi/components/auth/Signup';
 
 
 const App = () => {
@@ -19,7 +21,7 @@ const App = () => {
     <StrapiAdmin baseURL='http://localhost:1337/api'>
       <Container className='my-10'>
 
-        <StrapiFormProvider
+        {/* <StrapiFormProvider
           collectionName="students"
           // slug="58"
           query="populate=experience.Company.Contact,experience.Company.City,experience.Company.Industry,experience.Designation,Skills,qualification.school,qualification.qualification,Contacts,Address,Address.City,IndustriesPreference"
@@ -35,12 +37,12 @@ const App = () => {
               <button className='mt-4 p-2 bg-blue-600 text-white rounded-md' type='submit' onClick={submit}>submit</button>
             </>
           )}
-        </StrapiFormProvider>
+        </StrapiFormProvider> */}
 
 
 
         {/* table  */}
-        <StrapiList collectionName='students' query="populate=experience.Company.Contact,experience.Company.City,experience.Company.Industry,experience.Designation,Skills,qualification.school,qualification.qualification,Contacts,Address,Address.City,IndustriesPreference" >
+        {/* <StrapiList collectionName='students' query="populate=experience.Company.Contact,experience.Company.City,experience.Company.Industry,experience.Designation,Skills,qualification.school,qualification.qualification,Contacts,Address,Address.City,IndustriesPreference" >
           <Filters fieldSchema={[...personalSchema, ...otherDetailSchema]} />
           <Card
             className="your-class-name"
@@ -48,7 +50,6 @@ const App = () => {
               <li key={item.id} className="flex justify-between gap-x-6 py-5">
                 <div className="flex min-w-0 gap-x-4">
                   <div className="h-12 w-12 rounded-full bg-gray-200 overflow-auto">
-                    {/* <img alt="" src={item.imageUrl} className="flex-none rounded-full" /> */}
                   </div>
                   <div className="min-w-0 flex-auto">
                     <p className="text-sm font-semibold leading-6 text-gray-900">{item?.FirstName} {item.LastName}</p>
@@ -64,7 +65,9 @@ const App = () => {
             </div>
           </Empty>
           <Pagination />
-        </StrapiList>
+        </StrapiList> */}
+        <Login />
+        {/* <Signup /> */}
       </Container>
     </StrapiAdmin>
   );

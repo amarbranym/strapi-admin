@@ -11,7 +11,7 @@ import { useStrapiContext } from '../../providers/StrapiAdmin';
 const StrapiField = ({ ...props }: any) => {
     const [field, meta] = useField(props.name)
     const { setFieldValue } = useFormikContext<any>();
-    const {baseURL} = useStrapiContext()
+    const { baseURL } = useStrapiContext()
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const [searchValue, setSearchValue] = useState<string>("");
     const [values, setValues] = useState<any[]>([]);
@@ -154,7 +154,7 @@ const StrapiField = ({ ...props }: any) => {
 
             {showMenu &&
                 <ul role="list" className=" w-full   max-h-[20rem] overflow-y-auto absolute z-40 mt-2  origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                >
+                >  
                     {
                         values?.length > 0 ? values?.map((item: any, index: any) => (
                             <li key={index + 1} onClick={() => onItemClick(item)} className={` hover:bg-gray-100 cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 ${isSelected(item) && "bg-gray-100"}`}>{item.label}</li>

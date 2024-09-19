@@ -14,7 +14,7 @@ const Form_Input = ({ ...props }:any) => {
         className="input-text"
       />
         {
-          meta.touched && meta.error && <div className="text-red-500 text-sm mt-1">{meta.error}</div>
+          meta.touched && meta.error && <div className="error">{meta.error}</div>
         }</>)
 
       }
